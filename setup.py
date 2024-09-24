@@ -7,7 +7,7 @@ except(IOError, ImportError):
     long_description = open('README.md').read()
 
 setup(name='mlmaid',
-      version='0.1.2',
+      version='0.1.2.2',
       description='ML-MAID : ML - Miniature Automatic Installer for Dependencies',
       long_description_content_type='text/markdown',
       long_description=long_description,

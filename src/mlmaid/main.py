@@ -140,7 +140,7 @@ def install_module_unit(module_name:str, version:str, env_type:str='system', exe
     if version == '':
         return
     if version != 'latest':
-        module_specifier = f'{module_name}=={version}'
+        module_specifier = str(module_name) + "==" + str(version)
     else:
         module_specifier = module_name
     
@@ -152,7 +152,7 @@ def install_module_unit(module_name:str, version:str, env_type:str='system', exe
             tprint("✘ UNABLE : " + str(sys.executable) + " -m pip install " + str(module_specifier) + ". Skipping.")
     elif env_type == 'portable':
         try:
-            subprocess.check_call([sys.executable, "-m", "pip", "install", module_specifier, f"--target={modules_path}"])
+            subprocess.check_call([sys.executable, "-m", "pip", "install", module_specifier, "--target=" + str(modules_path)])
         except:
             tprint("✘ UNABLE : " + str(sys.executable) + " -m pip install " + str(module_specifier) + " --target=" + str(modules_path) + ". Skipping.")
     tprint("[-->] Installed : " + str(module_name) + "==" + str(version))
@@ -424,9 +424,9 @@ def python_help(script_path:str, version_required:str='3.10.12'):
             except:
                 tprint("Last command has some errors, which you can fix at your convenience. Ignoring errors in updating repos other than deadsnakes, continuing.")
             input("\n(Step-3) Installing Python " + str(version_required) + " : \nsudo apt install python" + str(version_required) + "\n(press Enter) ")
-            subprocess.check_call(['sudo', 'apt', 'install', f'python{version_required}'])
+            subprocess.check_call(['sudo', 'apt', 'install', "python" + str(version_required)])
             input("\n(Step-4) Installing venv package : \nsudo apt install python" + str(version_required) + "-venv\n(press Enter) ")
-            subprocess.check_call(['sudo', 'apt', 'install', f'python{version_required}-venv'])
+            subprocess.check_call(['sudo', 'apt', 'install', "python" + str(version_required) + "-venv"])
         elif len(version_required.split('.')) == 3 and version_required.split('.')[-1] != '':
             """
             Do the following:
@@ -469,13 +469,13 @@ def python_help(script_path:str, version_required:str='3.10.12'):
                 input("Getting the Python " + str(version_required) + " source code : wget https://www.python.org/ftp/python/" + str(version_required) + "/Python-" + str(version_required) + ".tgz\n(press Enter)")
                 subprocess.check_call(['wget', "https://www.python.org/ftp/python/" + str(version_required) + "/Python-" + str(version_required) + ".tgz"])
                 input("Extracting source code tar... : \ntar -xvf Python-" + str(version_required) + ".tgz (press ENTER)")
-                subprocess.check_call(['tar', '-xvf', f'Python-{version_required}.tgz'])
-                command = "\\
-                \ncd Python-" + str(version_required) +\\
-                "\n./configure --enable-optimizations\\
-                \nmake -j$(nproc)\\
-                \nsudo make altinstall\n\\
-                "
+                subprocess.check_call(['tar', '-xvf', "Python-" + str(version_required) + ".tgz"])
+                command = \
+                "\ncd Python-" + str(version_required) + \
+                "\n./configure --enable-optimizations" + \
+                "\nmake -j$(nproc)" + \
+                "\nsudo make altinstall"
+                
                 input("Configuring and intalling : \n" + str(command) + " \n(press Enter) ")
                 os.system(command)
                 tprint('Python installation complete...')
@@ -501,7 +501,7 @@ def python_help(script_path:str, version_required:str='3.10.12'):
         # Re-run the Python script using the executable from the venv, terminate this script.
         #tprint('TODO : re-run the script from the binary available in venv.')
         #rebase_script_execution(script_path=script_path, venv_path=venv_path)
-        overwrite_shebang(file_path=script_path, new_shebang=f'#!{os.path.join(venv_path, "bin", "python")}')
+        overwrite_shebang(file_path=script_path, new_shebang="#!" + str(os.path.join(venv_path, "bin", "python")))
         exit()
 
     else: # For windows
