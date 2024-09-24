@@ -13,7 +13,7 @@ ML Maid aims to automate the use of tools like Docker / Conda / Python venv **wi
 
 ## Installation
 ```bash
-pip install ml-maid
+pip install mlmaid
 ```
 
 ## Usage
