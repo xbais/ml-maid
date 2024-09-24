@@ -67,7 +67,7 @@ def get_python_version(python_executable_path:str):
             version_string = version_string.lower().replace('python', '').strip()
         return version_string
     except subprocess.CalledProcessError as e:
-        print(f"Error occurred: {e}")
+        print("Error occurred: ", e)
         exit()
         return None
 
@@ -81,36 +81,36 @@ def install_self_dependencies():
     try:
         import subprocess
     except:
-        print(f"{SELF_FILE_NAME} : Installing self-dependency : subprocess.")
+        print(SELF_FILE_NAME, " : Installing self-dependency : subprocess.")
         subprocess.check_call([sys.executable, '-m', 'pip', 'install', "subprocess"])
         import subprocess
-    print(f"{SELF_FILE_NAME} : Imported : subprocess")
+    print(SELF_FILE_NAME + " : Imported : subprocess")
     import pkg_resources # Depends on setuptools (pip install setuptools)
 
     try:
         import tabulate
     except:
-        print(f"{SELF_FILE_NAME} : Installing self-dependency : tabulate.")
+        print(SELF_FILE_NAME + " : Installing self-dependency : tabulate.")
         subprocess.check_call([sys.executable, '-m', 'pip', 'install', "tabulate"])
         import tabulate
-    print(f"{SELF_FILE_NAME} : Imported : tabulate")
+    print(SELF_FILE_NAME + " : Imported : tabulate")
 
     try:
         import tqdm
     except:
-        print(f"{SELF_FILE_NAME} : Installing self-dependency : tqdm.")
+        print(SELF_FILE_NAME + " : Installing self-dependency : tqdm.")
         subprocess.check_call([sys.executable, '-m', 'pip', 'install', "tqdm"])
         import tqdm
-    print(f"{SELF_FILE_NAME} : Imported : tqdm")
+    print(SELF_FILE_NAME + " : Imported : tqdm")
 
     tprint = tqdm.tqdm.write
 
     try:
         import wheel
     except:
-        print(f'{SELF_FILE_NAME} : Installing essential package : wheel')
+        print(SELF_FILE_NAME + " : Installing essential package : wheel")
         subprocess.check_call([sys.executable, '-m', 'pip', 'install', 'wheel'])
-        print(f'{SELF_FILE_NAME} : Installed package wheel.')
+        print(SELF_FILE_NAME + " : Installed package wheel.")
 
 """
 DESCRIPTION
@@ -149,13 +149,13 @@ def install_module_unit(module_name:str, version:str, env_type:str='system', exe
         try:
             subprocess.check_call([sys.executable, "-m", "pip", "install", module_specifier])
         except:
-            tprint(f"✘ UNABLE : {sys.executable} -m pip install {module_specifier}. Skipping.")
+            tprint("✘ UNABLE : " + str(sys.executable) + " -m pip install " + str(module_specifier) + ". Skipping.")
     elif env_type == 'portable':
         try:
             subprocess.check_call([sys.executable, "-m", "pip", "install", module_specifier, f"--target={modules_path}"])
         except:
-            tprint(f"✘ UNABLE : {sys.executable} -m pip install {module_specifier} --target={modules_path}. Skipping.")
-    tprint(f'[-->] Installed : {module_name}=={version}')
+            tprint("✘ UNABLE : " + str(sys.executable) + " -m pip install " + str(module_specifier) + " --target=" + str(modules_path) + ". Skipping.")
+    tprint("[-->] Installed : " + str(module_name) + "==" + str(version))
     pass
 
 def uninstall_module_unit(module_name:str, env_type:str='system', executable_path:str='/usr/bin/python3', modules_path:str=''):
@@ -166,11 +166,11 @@ def uninstall_module_unit(module_name:str, env_type:str='system', executable_pat
         try:
             subprocess.check_call([sys.executable, "-m", "pip", "uninstall", "-y", module_name])
         except:
-            tprint(f"✘ UNABLE : {sys.executable} -m pip uninstall -y {module_name}. Skipping.")
+            tprint("✘ UNABLE : " + str(sys.executable) + " -m pip uninstall -y " + str(module_name) + ". Skipping.")
     elif env_type == 'portable':
         # Delete the module directory # TODO
         pass
-    tprint(f'[<--] Uninstalled : {module_name}')
+    tprint("[<--] Uninstalled : "+ str(module_name))
     pass
 
 def install_module_wrapper(module_name:str, version:str, is_installed:bool=False, version_is_right:bool=False):
@@ -181,11 +181,11 @@ def install_module_wrapper(module_name:str, version:str, is_installed:bool=False
     if is_installed:
         if not version_is_right:
             if version == 'latest':
-                tprint(f'[---] Module {module_name} is installed. Ignoring. Current version : {version}')
+                tprint("[---] Module " + str(module_name) + " is installed. Ignoring. Current version : " + str(version))
                 ENV_HAS_CHANGED = False
                 return
             else:
-                tprint(f'[info] Module {module_name} is installed, version mismatch. Installing v{version}' )
+                tprint("[info] Module " + str(module_name) + " is installed, version mismatch. Installing v" + str(version))
                 # Uninstall the module
                 uninstall_module_unit(module_name)
                 # Install the right version of the module
@@ -331,7 +331,7 @@ def get_modules(project_dir:str, env_type:str):
     for module in tqdm.tqdm(sorted(list(modules_dict.keys())), desc="Installing modules", colour="blue", position=0, leave=True):
         # Check if the package is a standard_lib package, if it is - ignore it
         if module in stdlib_packages:
-            tprint(f'[---] Module {module} is a standard lib package (ie part of Python installation), ignoring.')
+            tprint("[---] Module " + str(module) + " is a standard lib package (ie part of Python installation), ignoring.")
             continue
         is_installed, version_is_right = module_exists(module_name=module, version=modules_dict[module])
         install_module_wrapper(module,  modules_dict[module], is_installed, version_is_right)
@@ -353,7 +353,7 @@ def custom_python_is_correct(python_version:str):
         #if 'python' in output.lower():
         #    output = output.lower().replace('python', '').strip()
     except subprocess.CalledProcessError as e:
-        print(f"Error occurred: {e}")
+        print("Error occurred: ", e)
         print(traceback.format_exc())
         exit()
         output = None
@@ -364,7 +364,7 @@ def custom_python_is_correct(python_version:str):
 def is_file_with_root(file_path):
     try:
         # Run the 'test -f' command with sudo to check if the file exists
-        tprint(f'Checking if directory exists using sudo, may require password... : sudo test -f {file_path}')
+        tprint("Checking if directory exists using sudo, may require password... : sudo test -f " + str(file_path))
         result = subprocess.run(['sudo', 'test', '-f', file_path], check=True)
         #print(result, result.returncode == 0)
         return result.returncode == 0
@@ -382,10 +382,10 @@ def overwrite_shebang(file_path:str, new_shebang:str):
     # Check if the first line is a shebang
     if lines[0].startswith('#!'):
         lines[0] = new_shebang + '\n'
-        tprint(f'Changing the file shebang from {lines[0]} to {new_shebang}.')
+        tprint("Changing the file shebang from " + str(lines[0]) + " to " + str(new_shebang))
     else:
         lines.insert(0, new_shebang + '\n')
-        tprint(f'Adding fresh shebang to file : {new_shebang}')
+        tprint("Adding fresh shebang to file : " + str(new_shebang))
 
     with open(file_path, 'w') as file:
         file.writelines(lines)
@@ -394,13 +394,13 @@ def overwrite_shebang(file_path:str, new_shebang:str):
     tprint('Making the script executable.')
     subprocess.check_call(['chmod', 'u+x', file_path])
     tprint('-----')
-    tprint(f'Done. Now, directly execute the script. Command = \n{file_path}')
-    tprint(f'If in the correct directory, just run : \n./{file_path.split("/")[-1]}')
+    tprint("Done. Now, directly execute the script. Command = \n" + str(file_path))
+    tprint("If in the correct directory, just run : \n./" + str(file_path.split("/")[-1]))
 
 def rebase_script_execution(script_path:str, venv_path:str):
     tprint('IMPORTANT : The python script {script_path} is now being rebased to the right venv {correct_venv_path}.')
     # Command to activate the virtual environment and run the new script
-    command = f"source {os.path.join(venv_path, 'bin', 'activate')} && python {script_path}"
+    command = "source " + str(os.path.join(venv_path, 'bin', 'activate')) + " && python " + str(script_path)
 
     # Run the command in a detached process
     subprocess.Popen(['bash', '-c', command],
@@ -416,16 +416,16 @@ def python_help(script_path:str, version_required:str='3.10.12'):
             if not input("NOTE\nThe following process will require your sudo password, but rest assured, your password will be used by your system shell directly.\nThis Python script cannot access it. Press y to continue.") == 'y':
                 tprint('Aborting...')
                 exit()
-            input(f'\n(Step-1) Adding deadsnakes repo (needed to install python{version_required}) : \nsudo add-apt-repository ppa:deadsnakes/ppa \n(press Enter, you will be asked for sudo password)')
+            input("\n(Step-1) Adding deadsnakes repo (needed to install python" + str(version_required) + ") : \nsudo add-apt-repository ppa:deadsnakes/ppa \n(press Enter, you will be asked for sudo password)")
             subprocess.check_call(['sudo', 'add-apt-repository', 'ppa:deadsnakes/ppa']) # Will ask for sudo passwords
-            input(f'\n(Step-2) Running apt-update to update package list : \nsudo apt update\n(press Enter) ')
+            input("\n(Step-2) Running apt-update to update package list : \nsudo apt update\n(press Enter) ")
             try:
                 subprocess.check_call(['sudo', 'apt', 'update'])
             except:
                 tprint("Last command has some errors, which you can fix at your convenience. Ignoring errors in updating repos other than deadsnakes, continuing.")
-            input(f'\n(Step-3) Installing Python {version_required} : \nsudo apt install python{version_required}\n(press Enter) ')
+            input("\n(Step-3) Installing Python " + str(version_required) + " : \nsudo apt install python" + str(version_required) + "\n(press Enter) ")
             subprocess.check_call(['sudo', 'apt', 'install', f'python{version_required}'])
-            input(f'\n(Step-4) Installing venv package : \nsudo apt install python{version_required}-venv\n(press Enter) ')
+            input("\n(Step-4) Installing venv package : \nsudo apt install python" + str(version_required) + "-venv\n(press Enter) ")
             subprocess.check_call(['sudo', 'apt', 'install', f'python{version_required}-venv'])
         elif len(version_required.split('.')) == 3 and version_required.split('.')[-1] != '':
             """
@@ -436,14 +436,14 @@ def python_help(script_path:str, version_required:str='3.10.12'):
                 4. If a venv is present, change its Python executable symbolic link to the python just installed in /usr/local/bin. (change all 3 : bin/python, bin/python3, bin/python-3.10)
             """
             # Check if Python version is present in /usr/local/bin/ , for example /usr/local/bin/python3.10 : TODO , if not then install it from source
-            py_path = f'/usr/local/bin/python{version_required.split(".")[0]}.{version_required.split(".")[1]}'
+            py_path = "/usr/local/bin/python" + str(version_required.split(".")[0]) + "." + str(version_required.split(".")[1])
             
             if not (custom_python_is_correct(version_required) and get_python_version(py_path) == version_required):
-                tprint(f'Python installation NOT found at {py_path}. Attempting install...')
+                tprint("Python installation NOT found at " + str(py_path) + ". Attempting install...")
 
                 #tprint('-----\nIf python venv exists, please manually create a symbolic by running "ln -s /usr/local/bin/python3.x my_venv_path/bin/python3" , else create python venv.\n-----')
                 # Install Python version from source
-                tprint(f'Installing Python {version_required} from source...')
+                tprint("Installing Python " + str(version_required) + " from source...")
                 command = '''
                 sudo apt-get update
                 sudo apt-get install -y \\
@@ -464,39 +464,39 @@ def python_help(script_path:str, version_required:str='3.10.12'):
                 libgmp-dev \\
                 wget
                 '''
-                input(f'Installing apt requirements : \n{command}\n(press Enter, you may be asked for your sudo password)')
+                input("Installing apt requirements : \n" + str(command) + "\n(press Enter, you may be asked for your sudo password)")
                 os.system(command)
-                input(f'Getting the Python {version_required} source code : wget https://www.python.org/ftp/python/{version_required}/Python-{version_required}.tgz\n(press Enter)')
-                subprocess.check_call(['wget', f'https://www.python.org/ftp/python/{version_required}/Python-{version_required}.tgz'])
-                input(f'Extracting source code tar... : \ntar -xvf Python-{version_required}.tgz (press ENTER)')
+                input("Getting the Python " + str(version_required) + " source code : wget https://www.python.org/ftp/python/" + str(version_required) + "/Python-" + str(version_required) + ".tgz\n(press Enter)")
+                subprocess.check_call(['wget', "https://www.python.org/ftp/python/" + str(version_required) + "/Python-" + str(version_required) + ".tgz"])
+                input("Extracting source code tar... : \ntar -xvf Python-" + str(version_required) + ".tgz (press ENTER)")
                 subprocess.check_call(['tar', '-xvf', f'Python-{version_required}.tgz'])
-                command = f"""
-                cd Python-{version_required}
-                ./configure --enable-optimizations
-                make -j$(nproc)
-                sudo make altinstall
-                """
-                input(f'Configuring and intalling : \n{command} \n(press Enter) ')
+                command = "\\
+                \ncd Python-" + str(version_required) +\\
+                "\n./configure --enable-optimizations\\
+                \nmake -j$(nproc)\\
+                \nsudo make altinstall\n\\
+                "
+                input("Configuring and intalling : \n" + str(command) + " \n(press Enter) ")
                 os.system(command)
                 tprint('Python installation complete...')
                 if version_required == get_python_version(py_path):
                     tprint("Installation verified, correct version installed.")
                 else:
-                    tprint(f"Verification UNSUCCESSFUL : {version_required} (required) != {get_python_version(py_path)} (installed). Please manually check installation : {py_path}")
+                    tprint("Verification UNSUCCESSFUL : " + str(version_required) + " (required) != " + str(get_python_version(py_path)) + " (installed). Please manually check installation : " + str(py_path))
                     exit()
             else:
-                tprint(f'Correct python version already installed at : {py_path}')
+                tprint("Correct python version already installed at : " + str(py_path))
             
             # Check if venv exists
-            venv_path = os.path.join(os.getcwd(), f'pyvenv_{version_required}')
-            tprint(f'Checking if the venv is present at : {venv_path}')
+            venv_path = os.path.join(os.getcwd(), "pyvenv_" + str(version_required))
+            tprint("Checking if the venv is present at : " + str(venv_path))
             if not os.path.isdir(venv_path):
-                tprint(f'Python venv not found at {venv_path}... Creating a venv')
-                tprint(f'Executing : {py_path} -m venv {venv_path}')
+                tprint("Python venv not found at " + str(venv_path) + "... Creating a venv")
+                tprint("Executing : " + str(py_path) + " -m venv " + str(venv_path))
                 subprocess.check_call([py_path, '-m', 'venv', venv_path])
             else:
                 tprint("Python venv already present.")
-                tprint(f"TODO : Re-link symbolic links of the venv ({venv_path}) to the installation at {py_path}")
+                tprint("TODO : Re-link symbolic links of the venv (" + str(venv_path) + " to the installation at " + str(py_path))
             
         # Re-run the Python script using the executable from the venv, terminate this script.
         #tprint('TODO : re-run the script from the binary available in venv.')
@@ -535,7 +535,7 @@ def install(script_path:str, executable_path:str='/usr/bin/python3', modules_pat
     
     for sys_req in sys_reqs:
         if sys_req not in supported_sys_reqs:
-            print(f"ERROR : {sys_req} not supported. Support available for {supported_sys_reqs}")
+            print("ERROR : " + str(sys_req) + " not supported. Support available for " + str(supported_sys_reqs))
         if sys_req == 'cuda':
             install_cuda()
         elif sys_req == 'git':
@@ -550,16 +550,16 @@ def install(script_path:str, executable_path:str='/usr/bin/python3', modules_pat
         # Check if module is imported from Jupyter NB
         # Check Python version
         if python_version == "any":
-            print(f"INFO : Python version check bypassed, requirement = {python_version}x")
+            print("INFO : Python version check bypassed, requirement = " + str(python_version))
             pass
         elif platform.python_version().startswith(python_version):
             # Check if the Python version matches current
-            print(f"INFO : Correct Python version found : {platform.python_version()}, expected : {python_version}x")
+            print("INFO : Correct Python version found : " + str(platform.python_version()) + ", expected : " + str(python_version) + "x")
             if str(sys.executable).startswith('/usr/bin/python'):
-                print(f'..but, current python binary is system binary : {sys.executable}. Need to install separate binary.')
+                print('..but, current python binary is system binary : ' + str(sys.executable) + '. Need to install separate binary.')
                 python_help(version_required=python_version, script_path=script_path)
         else:
-            print(f"ERROR : Wrong Python version found {platform.python_version()}, expected : {python_version}x")
+            print("ERROR : Wrong Python version found " + str(platform.python_version()) + ", expected : " + str(python_version) + "x")
             python_help(version_required=python_version, script_path=script_path)
         
         install_self_dependencies()
@@ -570,7 +570,7 @@ def install(script_path:str, executable_path:str='/usr/bin/python3', modules_pat
         if modules_path == '':
             target_flag = ''
         else:
-            target_flag = f'--target={modules_path}'
+            target_flag = '--target=' + str(modules_path)
         
         # Get the modules_dict, install the modules
         modules_dict = get_modules(project_dir=project_dir, env_type=env_type)

@@ -6,8 +6,8 @@ try:
 except(IOError, ImportError):
     long_description = open('README.md').read()
 
-setup(name='ML-MAID',
-      version='0.1.1',
+setup(name='mlmaid',
+      version='0.1.2',
       description='ML-MAID : ML - Miniature Automatic Installer for Dependencies',
       long_description_content_type='text/markdown',
       long_description=long_description,
@@ -15,6 +15,6 @@ setup(name='ML-MAID',
       author_email='xbais@duck.com',
       url='https://github.com/xbais/ml-maid',
       package_dir = {'': 'src'},
-      install_requires=['tqdm', 'setuptools', 'tabulate', 'tqdm', 'wheel', 'pkgutil'],
+      install_requires=['tqdm', 'setuptools', 'tabulate', 'tqdm', 'wheel'],
       packages=['mlmaid'],
      )
