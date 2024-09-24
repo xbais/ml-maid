@@ -17,10 +17,18 @@ pip install ml-maid
 ```
 
 ## Usage
-In your main Python script add the following to automatically install / check the dependencies before any other code is run:
+⚫ In your main Python script add the following to automatically install / check the dependencies before any other code is run:
 ```python
 from mlmaid import install
 install(script_path=__file__, python_version='3.10.12', sys_reqs=['cuda==11.8'])
 ```
 (Change Python version and cuda version according to your requirements)
 
+⚫ Import your modules
+```python
+import my_local_module # local_module
+from PIL import Image # pillow==1.0.2
+```
+- Add the `# local_module` tag to modules that are local imports
+- If a module's import name is different from its installation name, just add the installation name as a comment
+- By default the latest version of all (non-local) modules will be installed, if you want a specific version, specify it as a comment after import statement. like : `import PIL # pillow==1.0.2`
