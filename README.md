@@ -3,7 +3,7 @@
 - Re-implement ML-Maid compliant workflows and repositories without a sweat.
 - No need to use Conda and Docker unless you really have to.
 - Requirement files don't solve the problem.
-- Setup CUDA automatically. https://img.shields.io/badge/pending-red 
+- Setup CUDA automatically. <img src='https://img.shields.io/badge/pending-red'/> 
 
 ## Why ML MAID ?
 ML Maid aimed to be a complete and unique tool that aims to automatically install dependencies in Python with specific focus on ML environments. It aims to solve the problem of environment re-creation from old code without the hassle of manually building docker containers unless really required. The idea behind ML-Maid is to implicitly enforce checks to keep the environment setup as simple as possible, so that it is easy to replicate. It also aims to completely automate the environment replication process. It aims to keep the environment simple starting from the production phase of the software life-cycle to save developer time. 
