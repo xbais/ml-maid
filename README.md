@@ -17,3 +17,10 @@ pip install ml-maid
 ```
 
 ## Usage
+In your main Python script add the following to automatically install / check the dependencies before any other code is run:
+```python
+from mlmaid import install
+install(script_path=__file__, python_version='3.10.12', sys_reqs=['cuda==11.8'])
+```
+(Change Python version and cuda version according to your requirements)
+
