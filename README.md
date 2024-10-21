@@ -1,6 +1,6 @@
 # ML-MAID : ML - Miniature Automatic Installer for Dependencies
 <center>
-<img src='banner.svg'/>
+<img src='banner.png'/>
 </center>
 
 - Install dependencies without having to issue a zillion `pip install` commands.
