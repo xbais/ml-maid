@@ -1,4 +1,5 @@
 # ML-MAID : ML - Miniature Automatic Installer for Dependencies
+![PyPI - Version](https://img.shields.io/pypi/v/mlmaid)
 <center>
 <img src='banner.png'/>
 </center>
