@@ -1,4 +1,5 @@
 # ML-MAID : ML - Miniature Automatic Installer for Dependencies
+
 - Install dependencies without having to issue a zillion `pip install` commands.
 - Re-implement ML-Maid compliant workflows and repositories without a sweat.
 - No need to use Conda and Docker unless you really have to.
@@ -10,11 +11,6 @@ ML Maid aimed to be a complete and unique tool that aims to automatically instal
 
 ## Is ML-Maid a Replacement for Docker / Conda / Python Venv : NO
 ML Maid aims to automate the use of tools like Docker / Conda / Python venv **without adding any additional complexity** so that the developer can focus on writing code.
-
-## Installation
-```bash
-pip install mlmaid
-```
 
 ## Usage
 ⚫ In your main Python script add the following to automatically install / check the dependencies before any other code is run:
@@ -32,3 +28,23 @@ from PIL import Image # pillow==1.0.2
 - Add the `# local_module` tag to modules that are local imports
 - If a module's import name is different from its installation name, just add the installation name as a comment
 - By default the latest version of all (non-local) modules will be installed, if you want a specific version, specify it as a comment after import statement. like : `import PIL # pillow==1.0.2`
+
+⚫ Install ML-Maid
+In your system Python3, just install ML-Maid once. **After this you probably wont need to install any other Python library again! 🥳🥳**
+```bash
+pip3 install mlmaid
+```
+
+⚫ Run Your Code in System Python3
+```bash
+python3 my_python_script.py
+```
+The above will automatically create a python venv with all the packages. It will also make your script executable.
+Now, you can simply run your program with fully configured python venv using command:
+```bash
+./my_python_script.py
+```
+
+Enjoy!
+
+
