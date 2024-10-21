@@ -72,7 +72,9 @@ def get_python_version(python_executable_path:str):
         return None
 
 def sanitize_module_name(module_name:str):
-    if ',' in module_name:
+    if ('pip3 install' in module_name) or ('pip install' in module_name):
+        return module_name # Module name carries the full installation command
+    elif ',' in module_name:
         module_name = module_name.replace(',', '')
     return module_name
 
@@ -308,6 +310,8 @@ def get_modules(project_dir:str, env_type:str):
                 elif '==' in _:
                     version = _.split('==')[-1].strip()
                     module_name = _.split('==')[0].strip()
+                elif ('pip3 install' in _) or ('pip install in _'):
+                    module_name = _.strip() # TODO : In this the module_name will carry the full installation command
                 else:
                     version = 'latest'
             else:

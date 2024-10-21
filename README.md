@@ -1,4 +1,7 @@
 # ML-MAID : ML - Miniature Automatic Installer for Dependencies
+<center>
+<img src='logo.svg'/>
+</center>
 
 - Install dependencies without having to issue a zillion `pip install` commands.
 - Re-implement ML-Maid compliant workflows and repositories without a sweat.
