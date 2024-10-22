@@ -28,7 +28,7 @@ README
 IGNORE_THESE_PKGS = [
                         'autoinstall_dependencies', # Self
                      ]
-import subprocess, pkgutil, sys, os, platform, importlib, traceback
+import subprocess, pkgutil, sys, os, platform, importlib, traceback, inspect, json
 
 
 # Satisfy Self Dependencies
@@ -50,6 +50,40 @@ tabulate = None
 ENV_HAS_CHANGED = False
 STDLIB_PKGS = []
 INSTALLED_PKGS = {}
+
+class requirements_txt():
+    def __init__(self) -> None:
+        self.requirements_dict = {}
+
+        if os.path.isfile('requirements.txt'):
+            self.exists = True
+            # load requirements
+            with open('requirements.txt', 'r') as _:
+                self.write_data = _.readlines()
+            
+            for requirement in self.write_data:
+                if '==' in self.write_data:
+                    _ = requirement.split('==')
+                    self.requirements_dict[_[0]] == _[1]
+        else:
+            self.exists = False
+    
+    def add_requirement(self, module:str, version:str):
+        self.requirements_dict[module] = version
+        return self.requirements_dict
+
+    def save(self):
+        # write requirements.txt
+        with open('requirements.txt', 'w') as _:
+            _.writelines([_ + '==' + self.requirements_dict[_] for _ in self.requirements_dict.keys()])
+        pass
+
+def get_caller_filename():
+    # Get the current stack frame and move up two levels to get the caller
+    caller_frame = inspect.stack()[2]
+    # Extract the file name from the caller's frame
+    caller_filename = caller_frame.filename
+    return os.path.basename(caller_filename)
 
 def get_cwd():
     script_directory = os.path.dirname(os.path.abspath(__file__))
@@ -265,7 +299,7 @@ def module_exists(module_name:str, version:str='', env_type:str='system'):
         is_installed = True
         if installed_pkg_dict[module_name] == version:
             version_is_right = True
-    return is_installed, version_is_right
+    return is_installed, version_is_right, installed_pkg_dict[module_name]
 
 def get_modules(project_dir:str, env_type:str):
     """
@@ -337,7 +371,7 @@ def get_modules(project_dir:str, env_type:str):
         if module in stdlib_packages:
             tprint("[---] Module " + str(module) + " is a standard lib package (ie part of Python installation), ignoring.")
             continue
-        is_installed, version_is_right = module_exists(module_name=module, version=modules_dict[module])
+        is_installed, version_is_right, _ = module_exists(module_name=module, version=modules_dict[module])
         install_module_wrapper(module,  modules_dict[module], is_installed, version_is_right)
     
     return modules_dict
@@ -536,7 +570,7 @@ def install_git():
     tprint('TODO : Install and setup git. This function is in development. Please manually install git.')
     return
 
-def install(script_path:str, executable_path:str='/usr/bin/python3', modules_path:str='', env_type:str='', python_version:str='any', sys_reqs:list=[]) -> None:
+def install(script_path:str=get_caller_filename(), executable_path:str='/usr/bin/python3', modules_path:str='', env_type:str='', python_version:str='any', sys_reqs:list=[]) -> None:
     project_dir = '/'.join(script_path.split('/')[:-1])
     print("\n SETTING UP SYSTEM REQS")
     print("------------------------------\n")
