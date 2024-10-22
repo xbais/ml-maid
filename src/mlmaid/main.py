@@ -495,9 +495,14 @@ def python_help(script_path:str, version_required:str='3.10.12'):
             venv_path = os.path.join(os.getcwd(), "pyvenv_" + str(version_required))
             tprint("Checking if the venv is present at : " + str(venv_path))
             if not os.path.isdir(venv_path):
+                # Create new Python venv
                 tprint("Python venv not found at " + str(venv_path) + "... Creating a venv")
                 tprint("Executing : " + str(py_path) + " -m venv " + str(venv_path))
                 subprocess.check_call([py_path, '-m', 'venv', venv_path])
+
+                # Install ml-maid in the Python venv
+                tprint("Executing : " + str(py_path) + "/bin/python -m pip install mlmaid")
+                subprocess.check_call([os.path.join(py_path, '/bin/python'), '-m', 'pip', 'install', 'mlmaid'])
             else:
                 tprint("Python venv already present.")
                 tprint("TODO : Re-link symbolic links of the venv (" + str(venv_path) + " to the installation at " + str(py_path))
